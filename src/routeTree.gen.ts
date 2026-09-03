@@ -9,27 +9,172 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SiteRouteImport } from './routes/_site'
+import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteBrowseRouteImport } from './routes/_site.browse'
+import { Route as SiteGenresRouteImport } from './routes/_site.genres'
+import { Route as SiteMoviesRouteImport } from './routes/_site.movies'
+import { Route as SiteSearchRouteImport } from './routes/_site.search'
+import { Route as SiteSeriesRouteImport } from './routes/_site.series'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const SiteRoute = SiteRouteImport.update({
+  id: '/_site',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteIndexRoute = SiteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteBrowseRoute = SiteBrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteGenresRoute = SiteGenresRouteImport.update({
+  id: '/genres',
+  path: '/genres',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteMoviesRoute = SiteMoviesRouteImport.update({
+  id: '/movies',
+  path: '/movies',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteSearchRoute = SiteSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteSeriesRoute = SiteSeriesRouteImport.update({
+  id: '/series',
+  path: '/series',
+  getParentRoute: () => SiteRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof SiteIndexRoute
+  '/browse': typeof SiteBrowseRoute
+  '/genres': typeof SiteGenresRoute
+  '/movies': typeof SiteMoviesRoute
+  '/search': typeof SiteSearchRoute
+  '/series': typeof SiteSeriesRoute
+}
+export interface FileRoutesByTo {
+  '/browse': typeof SiteBrowseRoute
+  '/genres': typeof SiteGenresRoute
+  '/movies': typeof SiteMoviesRoute
+  '/search': typeof SiteSearchRoute
+  '/series': typeof SiteSeriesRoute
+  '/': typeof SiteIndexRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_site': typeof SiteRouteWithChildren
+  '/_site/browse': typeof SiteBrowseRoute
+  '/_site/genres': typeof SiteGenresRoute
+  '/_site/movies': typeof SiteMoviesRoute
+  '/_site/search': typeof SiteSearchRoute
+  '/_site/series': typeof SiteSeriesRoute
+  '/_site/': typeof SiteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/' | '/browse' | '/genres' | '/movies' | '/search' | '/series'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/browse' | '/genres' | '/movies' | '/search' | '/series' | '/'
+  id:
+    | '__root__'
+    | '/_site'
+    | '/_site/browse'
+    | '/_site/genres'
+    | '/_site/movies'
+    | '/_site/search'
+    | '/_site/series'
+    | '/_site/'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  SiteRoute: typeof SiteRouteWithChildren
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_site': {
+      id: '/_site'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_site/': {
+      id: '/_site/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/browse': {
+      id: '/_site/browse'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof SiteBrowseRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/genres': {
+      id: '/_site/genres'
+      path: '/genres'
+      fullPath: '/genres'
+      preLoaderRoute: typeof SiteGenresRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/movies': {
+      id: '/_site/movies'
+      path: '/movies'
+      fullPath: '/movies'
+      preLoaderRoute: typeof SiteMoviesRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/search': {
+      id: '/_site/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SiteSearchRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/series': {
+      id: '/_site/series'
+      path: '/series'
+      fullPath: '/series'
+      preLoaderRoute: typeof SiteSeriesRouteImport
+      parentRoute: typeof SiteRoute
+    }
+  }
+}
+
+interface SiteRouteChildren {
+  SiteBrowseRoute: typeof SiteBrowseRoute
+  SiteGenresRoute: typeof SiteGenresRoute
+  SiteMoviesRoute: typeof SiteMoviesRoute
+  SiteSearchRoute: typeof SiteSearchRoute
+  SiteSeriesRoute: typeof SiteSeriesRoute
+  SiteIndexRoute: typeof SiteIndexRoute
+}
+
+const SiteRouteChildren: SiteRouteChildren = {
+  SiteBrowseRoute: SiteBrowseRoute,
+  SiteGenresRoute: SiteGenresRoute,
+  SiteMoviesRoute: SiteMoviesRoute,
+  SiteSearchRoute: SiteSearchRoute,
+  SiteSeriesRoute: SiteSeriesRoute,
+  SiteIndexRoute: SiteIndexRoute,
+}
+
+const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  SiteRoute: SiteRouteWithChildren,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
