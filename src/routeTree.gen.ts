@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteAboutRouteImport } from './routes/_site.about'
 import { Route as SiteBrowseRouteImport } from './routes/_site.browse'
+import { Route as SiteContactRouteImport } from './routes/_site.contact'
+import { Route as SiteFaqRouteImport } from './routes/_site.faq'
 import { Route as SiteGenresRouteImport } from './routes/_site.genres'
 import { Route as SiteMoviesRouteImport } from './routes/_site.movies'
 import { Route as SiteMyListRouteImport } from './routes/_site.my-list'
@@ -31,9 +34,24 @@ const SiteIndexRoute = SiteIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SiteRoute,
 } as any)
+const SiteAboutRoute = SiteAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteBrowseRoute = SiteBrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteContactRoute = SiteContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteFaqRoute = SiteFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteGenresRoute = SiteGenresRouteImport.update({
@@ -84,7 +102,10 @@ const SiteTitleIdRoute = SiteTitleIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
+  '/about': typeof SiteAboutRoute
   '/browse': typeof SiteBrowseRoute
+  '/contact': typeof SiteContactRoute
+  '/faq': typeof SiteFaqRoute
   '/genres': typeof SiteGenresRoute
   '/movies': typeof SiteMoviesRoute
   '/my-list': typeof SiteMyListRoute
@@ -96,7 +117,10 @@ export interface FileRoutesByFullPath {
   '/title/$id': typeof SiteTitleIdRoute
 }
 export interface FileRoutesByTo {
+  '/about': typeof SiteAboutRoute
   '/browse': typeof SiteBrowseRoute
+  '/contact': typeof SiteContactRoute
+  '/faq': typeof SiteFaqRoute
   '/genres': typeof SiteGenresRoute
   '/movies': typeof SiteMoviesRoute
   '/my-list': typeof SiteMyListRoute
@@ -111,7 +135,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_site': typeof SiteRouteWithChildren
+  '/_site/about': typeof SiteAboutRoute
   '/_site/browse': typeof SiteBrowseRoute
+  '/_site/contact': typeof SiteContactRoute
+  '/_site/faq': typeof SiteFaqRoute
   '/_site/genres': typeof SiteGenresRoute
   '/_site/movies': typeof SiteMoviesRoute
   '/_site/my-list': typeof SiteMyListRoute
@@ -127,7 +154,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/browse'
+    | '/contact'
+    | '/faq'
     | '/genres'
     | '/movies'
     | '/my-list'
@@ -139,7 +169,10 @@ export interface FileRouteTypes {
     | '/title/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/about'
     | '/browse'
+    | '/contact'
+    | '/faq'
     | '/genres'
     | '/movies'
     | '/my-list'
@@ -153,7 +186,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_site'
+    | '/_site/about'
     | '/_site/browse'
+    | '/_site/contact'
+    | '/_site/faq'
     | '/_site/genres'
     | '/_site/movies'
     | '/_site/my-list'
@@ -187,11 +223,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteIndexRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/_site/about': {
+      id: '/_site/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof SiteAboutRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/browse': {
       id: '/_site/browse'
       path: '/browse'
       fullPath: '/browse'
       preLoaderRoute: typeof SiteBrowseRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/contact': {
+      id: '/_site/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof SiteContactRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/faq': {
+      id: '/_site/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof SiteFaqRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/genres': {
@@ -261,7 +318,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface SiteRouteChildren {
+  SiteAboutRoute: typeof SiteAboutRoute
   SiteBrowseRoute: typeof SiteBrowseRoute
+  SiteContactRoute: typeof SiteContactRoute
+  SiteFaqRoute: typeof SiteFaqRoute
   SiteGenresRoute: typeof SiteGenresRoute
   SiteMoviesRoute: typeof SiteMoviesRoute
   SiteMyListRoute: typeof SiteMyListRoute
@@ -274,7 +334,10 @@ interface SiteRouteChildren {
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
+  SiteAboutRoute: SiteAboutRoute,
   SiteBrowseRoute: SiteBrowseRoute,
+  SiteContactRoute: SiteContactRoute,
+  SiteFaqRoute: SiteFaqRoute,
   SiteGenresRoute: SiteGenresRoute,
   SiteMoviesRoute: SiteMoviesRoute,
   SiteMyListRoute: SiteMyListRoute,
