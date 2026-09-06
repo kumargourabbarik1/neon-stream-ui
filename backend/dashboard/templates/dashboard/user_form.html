@@ -1,0 +1,68 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Add Admin — Movizo Dashboard{% endblock %}
+{% block page_title %}Add Admin User{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'dashboard:users' %}"
+   class="rounded-lg border border-white/10 px-4 py-2 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white">
+  ← Back to Users
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-lg">
+  <div class="rounded-xl border border-white/10 bg-zinc-900 p-6">
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Full Name</label>
+        <input name="display_name" required placeholder="e.g. John Doe"
+               class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" />
+        {% if errors.display_name %}<p class="mt-1 text-xs text-red-400">{{ errors.display_name }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Email</label>
+        <input name="email" type="email" required placeholder="admin@example.com"
+               value="{{ form_data.email|default:'' }}"
+               class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" />
+        {% if errors.email %}<p class="mt-1 text-xs text-red-400">{{ errors.email }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Password</label>
+        <input name="password" type="password" required placeholder="Min 8 characters"
+               class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" />
+        {% if errors.password %}<p class="mt-1 text-xs text-red-400">{{ errors.password }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Role</label>
+        <select name="role"
+                class="w-full rounded-lg border border-white/10 bg-zinc-900 px-4 py-2.5 text-sm text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500">
+          <option value="admin">Admin</option>
+          <option value="superadmin">Super Admin</option>
+        </select>
+      </div>
+
+      {% if errors.non_field %}
+      <div class="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        {{ errors.non_field }}
+      </div>
+      {% endif %}
+
+      <div class="flex items-center gap-3 pt-2">
+        <button type="submit"
+                class="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500">
+          Create Admin
+        </button>
+        <a href="{% url 'dashboard:users' %}"
+           class="rounded-lg border border-white/10 px-6 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
