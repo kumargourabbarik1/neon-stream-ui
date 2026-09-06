@@ -1,0 +1,54 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Genres — Movizo Dashboard{% endblock %}
+{% block page_title %}Genres{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'dashboard:genre-add' %}"
+   class="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-500">
+  <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+  </svg>
+  Add Genre
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="overflow-hidden rounded-xl border border-white/10 bg-zinc-900">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-white/10 text-left text-xs uppercase tracking-wider text-white/40">
+        <th class="px-5 py-3">Name</th>
+        <th class="px-5 py-3">Slug</th>
+        <th class="px-5 py-3">Active</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-white/5">
+      {% for genre in genres %}
+      <tr class="transition-colors hover:bg-white/3">
+        <td class="px-5 py-3 font-medium">{{ genre.name }}</td>
+        <td class="px-5 py-3 text-white/40 font-mono text-xs">{{ genre.slug }}</td>
+        <td class="px-5 py-3">
+          {% if genre.is_active %}<span class="text-green-400 text-xs">✓ Yes</span>
+          {% else %}<span class="text-white/30 text-xs">— No</span>{% endif %}
+        </td>
+        <td class="px-5 py-3">
+          <div class="flex items-center gap-2">
+            <a href="{% url 'dashboard:genre-edit' genre.pk %}"
+               class="rounded px-2 py-1 text-xs font-medium text-violet-400 hover:bg-violet-500/10">Edit</a>
+            <form method="post" action="{% url 'dashboard:genre-delete' genre.pk %}"
+                  onsubmit="return confirm('Delete {{ genre.name }}?')">
+              {% csrf_token %}
+              <button type="submit"
+                      class="rounded px-2 py-1 text-xs font-medium text-red-400 hover:bg-red-500/10">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="px-5 py-10 text-center text-white/30">No genres yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "django_otp",
     "api",
+    "dashboard",
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# Dashboard session auth
+LOGIN_URL = "/dashboard/login/"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"

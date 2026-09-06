@@ -1,0 +1,81 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Users — Movizo Dashboard{% endblock %}
+{% block page_title %}Admin Users{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'dashboard:user-add' %}"
+   class="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-500">
+  <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+  </svg>
+  Add Admin
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="overflow-hidden rounded-xl border border-white/10 bg-zinc-900">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-white/10 text-left text-xs uppercase tracking-wider text-white/40">
+        <th class="px-5 py-3">Email</th>
+        <th class="px-5 py-3">Display Name</th>
+        <th class="px-5 py-3">Role</th>
+        <th class="px-5 py-3">Status</th>
+        <th class="px-5 py-3">Joined</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-white/5">
+      {% for u in users %}
+      <tr class="transition-colors hover:bg-white/3">
+        <td class="px-5 py-3 font-medium">{{ u.email }}</td>
+        <td class="px-5 py-3 text-white/60">{{ u.display_name|default:"—" }}</td>
+        <td class="px-5 py-3">
+          <span class="rounded-full px-2 py-0.5 text-xs font-semibold
+            {% if u.role == 'superadmin' %}bg-violet-500/20 text-violet-400{% else %}bg-zinc-700 text-white/60{% endif %}">
+            {{ u.get_role_display }}
+          </span>
+        </td>
+        <td class="px-5 py-3">
+          <span class="rounded-full px-2 py-0.5 text-xs font-semibold
+            {% if u.status == 'active' %}bg-green-500/20 text-green-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+            {{ u.get_status_display }}
+          </span>
+        </td>
+        <td class="px-5 py-3 text-white/40">{{ u.date_joined|date:"d M Y" }}</td>
+        <td class="px-5 py-3">
+          {% if u != admin_user %}
+            <div class="flex items-center gap-2">
+              {% if u.status == 'active' %}
+              <form method="post" action="{% url 'dashboard:user-suspend' u.pk %}"
+                    onsubmit="return confirm('Suspend {{ u.email }}?')">
+                {% csrf_token %}
+                <button type="submit"
+                        class="rounded px-2 py-1 text-xs font-medium text-amber-400 hover:bg-amber-500/10">Suspend</button>
+              </form>
+              {% else %}
+              <form method="post" action="{% url 'dashboard:user-activate' u.pk %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="rounded px-2 py-1 text-xs font-medium text-green-400 hover:bg-green-500/10">Activate</button>
+              </form>
+              {% endif %}
+              <form method="post" action="{% url 'dashboard:user-delete' u.pk %}"
+                    onsubmit="return confirm('Permanently delete {{ u.email }}?')">
+                {% csrf_token %}
+                <button type="submit"
+                        class="rounded px-2 py-1 text-xs font-medium text-red-400 hover:bg-red-500/10">Delete</button>
+              </form>
+            </div>
+          {% else %}
+            <span class="text-xs text-white/20">You</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="px-5 py-10 text-center text-white/30">No users found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

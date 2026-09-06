@@ -1,0 +1,112 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ action }} Title — Movizo Dashboard{% endblock %}
+{% block page_title %}{{ action }} Title{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'dashboard:titles' %}"
+   class="rounded-lg border border-white/10 px-4 py-2 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white">
+  ← Back to Titles
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+  <form method="post" class="space-y-6">
+    {% csrf_token %}
+
+    <!-- Row 1 -->
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Name</label>
+        {{ form.name }}
+        {% if form.name.errors %}<p class="mt-1 text-xs text-red-400">{{ form.name.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Kind</label>
+        {{ form.kind }}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Status</label>
+        {{ form.status }}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Year</label>
+        {{ form.year }}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Rating (0–10)</label>
+        {{ form.rating }}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Season Count</label>
+        {{ form.season_count }}
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Studio</label>
+        {{ form.studio }}
+      </div>
+    </div>
+
+    <!-- Genres -->
+    <div>
+      <label class="mb-1.5 block text-sm font-medium text-white/80">Genres <span class="text-white/30">(hold Ctrl / ⌘ for multiple)</span></label>
+      {{ form.genres }}
+    </div>
+
+    <!-- Synopsis -->
+    <div>
+      <label class="mb-1.5 block text-sm font-medium text-white/80">Synopsis</label>
+      {{ form.synopsis }}
+    </div>
+
+    <!-- URLs -->
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Poster URL</label>
+        {{ form.poster_url }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Banner URL</label>
+        {{ form.banner_url }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Trailer URL</label>
+        {{ form.trailer_url }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-white/80">Video URL</label>
+        {{ form.video_url }}
+      </div>
+    </div>
+
+    <!-- Checkboxes -->
+    <div class="flex items-center gap-6">
+      <label class="flex cursor-pointer items-center gap-2 text-sm text-white/80">
+        {{ form.trending }}
+        Trending
+      </label>
+      <label class="flex cursor-pointer items-center gap-2 text-sm text-white/80">
+        {{ form.is_published }}
+        Published
+      </label>
+    </div>
+
+    <div class="flex items-center gap-3 pt-2">
+      <button type="submit"
+              class="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500">
+        {{ action }} Title
+      </button>
+      <a href="{% url 'dashboard:titles' %}"
+         class="rounded-lg border border-white/10 px-6 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}
